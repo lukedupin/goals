@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>goals.qml</file>
+        <file>helper.js</file>
+        <file>forms/UserSignup.qml</file>
+        <file>forms/Message.qml</file>
+        <file>forms/Input.qml</file>
+        <file>forms/LeaderBoard.qml</file>
+        <file>forms/RadiusProfile.qml</file>
+        <file>components/CaptureButton.qml</file>
+        <file>components/ProfileMedallion.qml</file>
+        <file>components/CaptureMedallion.qml</file>
+        <file>components/TitleBar.qml</file>
+        <file>components/CommunityButton.qml</file>
+        <file>resources/scale_end.png</file>
+        <file>resources/scale.png</file>
+        <file>resources/marker.png</file>
+        <file>resources/icon.png</file>
+        <file>resources/plus_icon_active.png</file>
+        <file>resources/plus_icon_passive.png</file>
+        <file>resources/stop_capture.png</file>
+        <file>resources/start_capture.png</file>
+        <file>resources/follow_me.png</file>
+        <file>resources/activity/bicycle.png</file>
+        <file>resources/user_pin.png</file>
+    </qresource>
+</RCC>
