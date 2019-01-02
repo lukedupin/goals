@@ -27,8 +27,8 @@ class UiMobile : public UiCommon
     //The ui is loaded
     void onUiLoaded();
 
-    //Request a user registration page
-    //void onRequestUserSignup();
+    //Let me know when the goals are done
+    void onDone( JStorage storage );
 };
 
 #endif

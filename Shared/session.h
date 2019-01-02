@@ -26,7 +26,7 @@ class Session : public QObject
     bool isLoaded();
 
     //Save the settings
-    bool save();
+    bool save( JStorage storage );
 };
 
 #endif

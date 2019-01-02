@@ -32,22 +32,56 @@ ApplicationWindow {
              entries.clear()
              var goals = SharedState.getStorage().goals
              for ( var i = 0; i < goals.length; i++ )
-                 entries.append(goals[i])
+                 entries.append({"goal": goals[i].goal, "count": goals[i].count,
+                                 "idx": i, "user_read": false})
          }
      }
 
+    //Done button =)
+    Button {
+        id: doneButton
+        anchors.fill: parent
+        height: 90
+        width: 90
+        anchors.margins: 20
+        text: "Click here if\nI know I can do this!!!!"
+        visible: false
+
+        onClicked: {
+            var ary = []
+            for ( var i = 0; i < entries.count; i++ )
+                ary.push( {"goal": entries.get(i)["goal"], "count": entries.get(i)["count"] })
+            Mailbox.emitDoneQml({"goals": ary})
+        }
+    }
+
+    //Add button
+    Button {
+        id: addGoal
+        text: "Add Goal"
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        height: 30
+        visible: !doneButton.visible
+
+        onClicked: entries.append({"goal": "New goal", "idx": entries.count,
+                                   "count": 0, "user_read": false})
+    }
+
     // Show the list ivew
     ListView {
-        anchors.fill: parent
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: addGoal.top
         clip: true
-
-        ScrollBar.vertical: ScrollBar {
-            policy: ScrollBar.AlwaysOn
-        }
+        visible: !doneButton.visible
 
         model: entries
         delegate:  Component {
             id: entryDelegate
+
             Item {
             //Rectangle {
                 id: wrapper
@@ -56,20 +90,78 @@ ApplicationWindow {
                 height: 40
                 //color: "#333333"
 
-                Label {
-                    id: goal
+                property bool editable: false
+
+                Rectangle {
+                    id: goalViewableParent
+                    radius: 15
+                    border.color: user_read? "green": "red"
+                    border.width: 2
+
                     anchors.margins: 3
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    text: goal
-                    color: "white"
-                    font.pixelSize: parent.height * 0.2
+
+                    height: parent.height
+
+                    visible: !editable
+
+                    Label {
+                        id: goalViewable
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.margins: 4
+                        text: goal
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            user_read = true
+                            count++
+                            for ( var i = 0; i < entries.count; i++ )
+                            {
+                                if ( !entries.get(i)["user_read"] )
+                                    return;
+                            }
+
+                            doneButton.visible = true
+                        }
+
+                        onDoubleClicked: wrapper.editable = true
+                    }
                 }
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: self.selectedEntry( uid )
+                TextField {
+                    id: goalEditable
+                    anchors.margins: 3
+                    anchors.left: parent.left
+                    anchors.right: remove.left
+
+                    height: parent.height
+
+                    text: goal
+                    visible: editable
+
+                    onEditingFinished: {
+                        goal = goalEditable.text
+                        wrapper.editable = false
+                    }
+                }
+
+                Button {
+                    id: remove
+                    anchors.right: parent.right
+                    anchors.margins: 3
+
+                    height: parent.height
+                    width: 40
+
+                    text: "Rm"
+                    visible: editable
+                    onClicked: {
+                        entries.remove(idx)
+                    }
                 }
             }
         }

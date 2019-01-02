@@ -31,6 +31,8 @@ int UiMobile::runUi(QGuiApplication* app, SharedState* shared_state)
     QStringList args(QCoreApplication::arguments());
 
     //Register to know when the UI exists
+    QObject::connect( shared_state->Mail, &Mailbox::done,
+                      this, &UiMobile::onDone );
     QObject::connect( shared_state->Mail, &Mailbox::uiLoaded,
                       this, &UiMobile::onUiLoaded );
 
@@ -53,18 +55,17 @@ int UiMobile::runUi(QGuiApplication* app, SharedState* shared_state)
 
     //Configure the QML engine
     _engine->addImportPath(QStringLiteral(":/imports"));
-    _engine->load(QUrl(QStringLiteral("qrc:///radius_mobile.qml")));
+    _engine->load(QUrl(QStringLiteral("qrc:///goals.qml")));
     QObject::connect(_engine, SIGNAL(quit()), qApp, SLOT(quit()));
 
-    QObject *item = _engine->rootObjects().first();
-    Q_ASSERT(item);
+    //QObject *item = _engine->rootObjects().first();
+    //Q_ASSERT(item);
 
     //Setup my context
     _engine->rootContext()->setContextProperty("ui_common", this );
 
-    QList<QVariant> radii;
-    QMetaObject::invokeMethod(item, "initializeProviders",
-                              Q_ARG(QVariant, QVariant::fromValue(parameters)));
+    //QMetaObject::invokeMethod(item, "initializeProviders",
+                              //Q_ARG(QVariant, QVariant::fromValue(parameters)));
 
     //Android platform!
     AndroidPlatform android_platform( app, _sharedState );
@@ -80,6 +81,12 @@ int UiMobile::runUi(QGuiApplication* app, SharedState* shared_state)
 
 void UiMobile::onUiLoaded()
 {
+}
+
+void UiMobile::onDone( JStorage storage )
+{
+    _sharedState->Sess->save( storage );
+    QGuiApplication::exit();
 }
 
 /*

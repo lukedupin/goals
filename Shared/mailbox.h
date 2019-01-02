@@ -24,6 +24,7 @@ class Mailbox : public QObject
     //*** UI Mobile
 
     void emitUiLoadedQml(  );
+    void emitDoneQml( QJSValue storage );
 
 
     signals:
@@ -31,6 +32,7 @@ class Mailbox : public QObject
     //*** UI Mobile
 
     void uiLoaded(  );
+    void done( JStorage storage );
 };
 
 #endif

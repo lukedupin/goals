@@ -60,11 +60,16 @@ bool Session::isLoaded()
     return _loaded;
 }
 
-bool Session::save()
+bool Session::save( JStorage storage )
 {
     QByteArray data;
-    if ( !_storage.exportJsonData( data ) )
+    if ( !storage.exportJsonData( data ) )
         return false;
+
+    //Save my storage
+    _storage.goals.clear();
+    for ( auto& goal: storage.goals.toList() )
+        _storage.goals.append( goal );
 
     //Open files
     auto&& file = QFile( filename );

@@ -13,3 +13,8 @@ void Mailbox::emitUiLoadedQml(   )
     emit uiLoaded(  );
 }
 
+void Mailbox::emitDoneQml( QJSValue storage  )
+{
+    emit done( JStorage( storage ) );
+}
+

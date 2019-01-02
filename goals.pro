@@ -1,7 +1,7 @@
-TARGET = radius
+TARGET = goals
 TEMPLATE = app
 
-QT += qml network quick positioning location networkauth sql sensors
+QT += qml quick
 
 linux:!android {
     DEFINES += DESKTOP_MODE
@@ -63,7 +63,7 @@ RESOURCES += \
     UI/mobile/goals.qrc
 
 OTHER_FILES +=\
-    UI/mobile/radius_mobile.qml \
+    UI/mobile/goals.qml \
     UI/mobile/helper.js
 
 /*
